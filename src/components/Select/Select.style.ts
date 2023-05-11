@@ -36,6 +36,7 @@ export const SelectOptionList = styled.ul`
   padding: 10px 6px;
   margin: 5px 0px 0px 0px;
   list-style-type: none;
+  z-index: 50;
 `;
 
 export const SelectOption = styled.li<{ active: boolean }>`

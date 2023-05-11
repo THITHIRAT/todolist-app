@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { Progress, Task } from "../../components";
 import { TASK_STATUS } from "../../constants";
 import { Box, Wrapper } from "./TodoList.style";
-import { useQuery } from "react-query";
-import { getTask } from "../../api/task";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteTask, getTask, updateTask } from "../../api/task";
 
 const TaskStatusOptions = [
   TASK_STATUS.ALL,
@@ -12,8 +12,19 @@ const TaskStatusOptions = [
 ];
 
 const TodoList = () => {
+  const queryClient = useQueryClient();
   const [taskStatus, setTaskStatus] = useState(TaskStatusOptions[0]);
   const { data: todoList } = useQuery("getTasks", () => getTask());
+  const { mutate: updateList } = useMutation(updateTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getTasks");
+    },
+  });
+  const { mutate: deleteList } = useMutation(deleteTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getTasks");
+    },
+  });
 
   const displayList = useMemo(() => {
     const list = todoList || [];
@@ -36,6 +47,8 @@ const TodoList = () => {
           taskStatusOptions={TaskStatusOptions}
           taskStatus={taskStatus}
           setTaskStatus={setTaskStatus}
+          onUpdate={updateList}
+          onDelete={deleteList}
         />
       </Box>
     </Wrapper>

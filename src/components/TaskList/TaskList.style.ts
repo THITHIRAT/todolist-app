@@ -72,7 +72,7 @@ export const ActionButtonList = styled.div`
   padding: 18px 22px;
   margin: 5px 0px 0px 0px;
   list-style-type: none;
-  z-index: 50;
+  z-index: 40;
 `;
 
 export const ActionText = styled.span<{ color?: string }>`

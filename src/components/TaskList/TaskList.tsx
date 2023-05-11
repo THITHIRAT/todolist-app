@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { IActionButtonList, ITodosResponse } from "../../interfaces";
+import { IActionButtonList, ITodo } from "../../interfaces";
 import {
   ActionButton,
   ActionButtonList,
@@ -14,13 +14,16 @@ import {
   Wrapper,
 } from "./TaskList.style";
 import { theme } from "../../styles";
+import { UseMutateFunction } from "react-query";
 
 interface ITaskList {
-  todoList: ITodosResponse[] | undefined;
+  todoList: ITodo[] | undefined;
+  onUpdate: UseMutateFunction<ITodo, unknown, ITodo, unknown>;
+  onDelete: UseMutateFunction<any, unknown, string, unknown>
 }
 
-const TaskList = ({ todoList }: ITaskList) => {
-  const [isSelectOpen, setIsSelectOpen] = useState<ITodosResponse | undefined>(
+const TaskList = ({ todoList, onUpdate, onDelete }: ITaskList) => {
+  const [isSelectOpen, setIsSelectOpen] = useState<ITodo | undefined>(
     undefined
   );
 
@@ -28,26 +31,15 @@ const TaskList = ({ todoList }: ITaskList) => {
     onTriggered: () => setIsSelectOpen(undefined),
   });
 
-  const ActionButtonOptionList: IActionButtonList[] = [
-    { label: "Edit", onClick: () => console.log("edit") },
-    {
-      label: "Delete",
-      textColor: theme.colors.progressBackground,
-      onClick: () => console.log("delete"),
-    },
-  ];
-
-  const handleActionButtonClick = (onClick: () => void) => {
-    onClick();
-    setIsSelectOpen(undefined);
-  };
-
   return (
     <Wrapper ref={ref}>
       {todoList?.map((todo) => (
         <TodoListWrapper key={todo.id + todo.title}>
           <CheckboxWrapper>
-            <Checkbox completed={todo.completed}>
+            <Checkbox
+              completed={todo.completed}
+              onClick={() => onUpdate({ ...todo, completed: !todo.completed })}
+            >
               <CheckIcon
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -83,15 +75,17 @@ const TaskList = ({ todoList }: ITaskList) => {
             {isSelectOpen?.id === todo.id &&
             isSelectOpen.title === todo.title ? (
               <ActionButtonList>
-                {ActionButtonOptionList?.map((option) => (
-                  <ActionText
-                    key={option.label}
-                    color={option?.textColor}
-                    onClick={() => handleActionButtonClick(option.onClick)}
+                <ActionText
+                    onClick={() => {}}
                   >
-                    {option.label}
+                    Edit
                   </ActionText>
-                ))}
+                  <ActionText
+                    color={theme.colors.progressBackground}
+                    onClick={() => onDelete(todo.id)}
+                  >
+                    Delete
+                  </ActionText>
               </ActionButtonList>
             ) : null}
           </ActionWrapper>
