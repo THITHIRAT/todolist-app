@@ -5,14 +5,14 @@ import { Box, Wrapper } from "./TodoList.style";
 import { useQuery } from "react-query";
 import { getTask } from "../../api/task";
 
-const taskStatusOptions = [
+const TaskStatusOptions = [
   TASK_STATUS.ALL,
   TASK_STATUS.DONE,
   TASK_STATUS.UNDONE,
 ];
 
 const TodoList = () => {
-  const [taskStatus, setTaskStatus] = useState(taskStatusOptions[0]);
+  const [taskStatus, setTaskStatus] = useState(TaskStatusOptions[0]);
   const { data: todoList } = useQuery("getTasks", () => getTask());
 
   const displayList = useMemo(() => {
@@ -33,7 +33,7 @@ const TodoList = () => {
         />
         <Task
           todoList={displayList[taskStatus]}
-          taskStatusOptions={taskStatusOptions}
+          taskStatusOptions={TaskStatusOptions}
           taskStatus={taskStatus}
           setTaskStatus={setTaskStatus}
         />

@@ -3,3 +3,9 @@ export interface ITodosResponse {
   id: string;
   title: string;
 }
+
+export interface IActionButtonList {
+  label: string;
+  textColor?: string;
+  onClick: () => void;
+}
