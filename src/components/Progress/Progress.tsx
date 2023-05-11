@@ -6,16 +6,19 @@ import {
   Wrapper,
 } from "./Progress.style";
 
-const percentage = 40;
+interface IProgress {
+  completeTask: number;
+  allTask: number;
+}
 
-const Progress = () => {
+const Progress = ({ completeTask, allTask }: IProgress) => {
   return (
     <Wrapper>
       <HeaderText>Progress</HeaderText>
       <ProgressBar>
-        <CompletedBar percentage={percentage} />
+        <CompletedBar percentage={completeTask / (allTask || 1) * 100} />
       </ProgressBar>
-      <TitleText>{percentage} completed</TitleText>
+      <TitleText>{completeTask} completed</TitleText>
     </Wrapper>
   );
 };

@@ -1,1 +1,5 @@
-import { TASK_STATUS } from "../constants";
+export interface ITodosResponse {
+  completed: boolean;
+  id: string;
+  title: string;
+}

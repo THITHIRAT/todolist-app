@@ -6,14 +6,13 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  height: 100vh;
   background-color: ${theme.colors.background};
 `;
 
 export const Box = styled.div`
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: fit-content;
   width: 100%;
   max-width: 720px;
   background-color: ${theme.colors.white};

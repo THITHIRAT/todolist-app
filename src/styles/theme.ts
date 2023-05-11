@@ -11,6 +11,7 @@ export const theme = {
     black: "#000000",
     darkGrey: "#2E2E2E",
     mediumGrey: "#9796A8",
+    lightGrey: "#A9A9A9",
     background: "#D1D0D9",
     boxBackground: "#F5F5F5",
     progressBackground: "#E07C7C",
