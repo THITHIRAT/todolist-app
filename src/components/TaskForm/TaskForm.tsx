@@ -4,18 +4,26 @@ import { UseMutateFunction } from "react-query";
 import { ITodo } from "../../interfaces";
 
 interface ITaskForm {
-  onCreate: UseMutateFunction<ITodo, unknown, string, unknown>;
+  task?: ITodo | undefined;
+  setEditTaskId?: React.Dispatch<React.SetStateAction<string>>
+  onCreate?: UseMutateFunction<ITodo, unknown, string, unknown>;
+  onUpdate?: UseMutateFunction<ITodo, unknown, ITodo, unknown>;
 }
 
-const TaskForm = ({ onCreate }: ITaskForm) => {
-  const [title, setTitle] = useState("");
+const TaskForm = ({ task, setEditTaskId, onCreate, onUpdate }: ITaskForm) => {
+  const [title, setTitle] = useState(task?.title || "");
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   }
 
   const handleSave = () => {
-    onCreate(title);
+    if (task) {
+      onUpdate && onUpdate({ ...task, title });
+      setEditTaskId && setEditTaskId("");
+    } else {
+      onCreate && onCreate(title);
+    }
   }
 
   return (  

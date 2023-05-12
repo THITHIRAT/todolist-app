@@ -25,6 +25,7 @@ interface ITaskList {
 }
 
 const TaskList = ({ todoList, onCreate, onUpdate, onDelete }: ITaskList) => {
+  const [editTaskId, setEditTaskId] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState<ITodo | undefined>(
     undefined
   );
@@ -36,62 +37,69 @@ const TaskList = ({ todoList, onCreate, onUpdate, onDelete }: ITaskList) => {
   return (
     <Wrapper ref={ref}>
       {todoList?.map((todo) => (
-        <TodoListWrapper key={todo.id + todo.title}>
-          <CheckboxWrapper>
-            <Checkbox
-              completed={todo.completed}
-              onClick={() => onUpdate({ ...todo, completed: !todo.completed })}
-            >
-              <CheckIcon
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </CheckIcon>
-            </Checkbox>
-            <Text completed={todo.completed}>{todo.title}</Text>
-          </CheckboxWrapper>
-          <ActionWrapper>
-            <ActionButton onClick={() => setIsSelectOpen(todo)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-                />
-              </svg>
-            </ActionButton>
-            {isSelectOpen?.id === todo.id &&
-            isSelectOpen.title === todo.title ? (
-              <ActionButtonList>
-                <ActionText
-                    onClick={() => {}}
+        <div key={todo.id + todo.title}>
+          {
+            todo.id === editTaskId ? (
+              <TaskForm task={todo} setEditTaskId={setEditTaskId} onUpdate={onUpdate} />
+            ) : (
+            <TodoListWrapper>
+              <CheckboxWrapper>
+                <Checkbox
+                  completed={todo.completed}
+                  onClick={() => onUpdate({ ...todo, completed: !todo.completed })}
+                >
+                  <CheckIcon
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2.5"
+                    stroke="currentColor"
                   >
-                    Edit
-                  </ActionText>
-                  <ActionText
-                    color={theme.colors.progressBackground}
-                    onClick={() => onDelete(todo.id)}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </CheckIcon>
+                </Checkbox>
+                <Text completed={todo.completed}>{todo.title}</Text>
+              </CheckboxWrapper>
+              <ActionWrapper>
+                <ActionButton onClick={() => setIsSelectOpen(todo)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
                   >
-                    Delete
-                  </ActionText>
-              </ActionButtonList>
-            ) : null}
-          </ActionWrapper>
-        </TodoListWrapper>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+                    />
+                  </svg>
+                </ActionButton>
+                {isSelectOpen?.id === todo.id ? (
+                  <ActionButtonList>
+                    <ActionText
+                        onClick={() => setEditTaskId(todo.id)}
+                      >
+                        Edit
+                      </ActionText>
+                      <ActionText
+                        color={theme.colors.progressBackground}
+                        onClick={() => onDelete(todo.id)}
+                      >
+                        Delete
+                      </ActionText>
+                  </ActionButtonList>
+                ) : null}
+              </ActionWrapper>
+            </TodoListWrapper>
+            )
+          }
+        </div>
       ))}
       <TaskForm onCreate={onCreate} />
     </Wrapper>

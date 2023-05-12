@@ -29,6 +29,7 @@ export const Checkbox = styled.div<{ completed: boolean }>`
   border-radius: 6px;
   background-color: ${({ completed }) =>
     completed ? theme.colors.selectBackground : theme.colors.white};
+  cursor: pointer;
 `;
 
 export const CheckIcon = styled.svg`
