@@ -18,5 +18,6 @@ export const theme = {
     progressBarBackground: "#3B3B3B",
     progressTitle: "#EBB9B8",
     selectBackground: "#585292",
+    placeholder: "#BCBCBC",
   }
 };

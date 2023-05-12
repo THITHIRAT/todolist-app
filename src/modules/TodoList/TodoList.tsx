@@ -3,7 +3,7 @@ import { Progress, Task } from "../../components";
 import { TASK_STATUS } from "../../constants";
 import { Box, Wrapper } from "./TodoList.style";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteTask, getTask, updateTask } from "../../api/task";
+import { createTask, deleteTask, getTask, updateTask } from "../../api/task";
 
 const TaskStatusOptions = [
   TASK_STATUS.ALL,
@@ -15,12 +15,17 @@ const TodoList = () => {
   const queryClient = useQueryClient();
   const [taskStatus, setTaskStatus] = useState(TaskStatusOptions[0]);
   const { data: todoList } = useQuery("getTasks", () => getTask());
-  const { mutate: updateList } = useMutation(updateTask, {
+  const { mutate: createTodo } = useMutation(createTask, {
     onSuccess: () => {
       queryClient.invalidateQueries("getTasks");
     },
   });
-  const { mutate: deleteList } = useMutation(deleteTask, {
+  const { mutate: updateTodo } = useMutation(updateTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getTasks");
+    },
+  });
+  const { mutate: deleteTodo } = useMutation(deleteTask, {
     onSuccess: () => {
       queryClient.invalidateQueries("getTasks");
     },
@@ -47,8 +52,9 @@ const TodoList = () => {
           taskStatusOptions={TaskStatusOptions}
           taskStatus={taskStatus}
           setTaskStatus={setTaskStatus}
-          onUpdate={updateList}
-          onDelete={deleteList}
+          onCreate={createTodo}
+          onUpdate={updateTodo}
+          onDelete={deleteTodo}
         />
       </Box>
     </Wrapper>

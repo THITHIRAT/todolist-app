@@ -10,8 +10,9 @@ interface ITask {
   taskStatusOptions: TASK_STATUS[];
   taskStatus: TASK_STATUS;
   setTaskStatus: (taskStatus: TASK_STATUS) => void;
+  onCreate: UseMutateFunction<ITodo, unknown, string, unknown>;
   onUpdate: UseMutateFunction<ITodo, unknown, ITodo, unknown>;
-  onDelete: UseMutateFunction<any, unknown, string, unknown>
+  onDelete: UseMutateFunction<any, unknown, string, unknown>;
 }
 
 const Task = ({
@@ -19,6 +20,7 @@ const Task = ({
   taskStatusOptions,
   taskStatus,
   setTaskStatus,
+  onCreate,
   onUpdate,
   onDelete,
 }: ITask) => {
@@ -32,7 +34,12 @@ const Task = ({
           setTaskStatus={setTaskStatus}
         />
       </Header>
-      <TaskList todoList={todoList} onUpdate={onUpdate} onDelete={onDelete} />
+      <TaskList
+        todoList={todoList}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+      />
     </Wrapper>
   );
 };

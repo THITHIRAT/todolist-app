@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import { IActionButtonList, ITodo } from "../../interfaces";
+import { ITodo } from "../../interfaces";
 import {
   ActionButton,
   ActionButtonList,
@@ -15,14 +15,16 @@ import {
 } from "./TaskList.style";
 import { theme } from "../../styles";
 import { UseMutateFunction } from "react-query";
+import TaskForm from "../TaskForm/TaskForm";
 
 interface ITaskList {
   todoList: ITodo[] | undefined;
+  onCreate: UseMutateFunction<ITodo, unknown, string, unknown>;
   onUpdate: UseMutateFunction<ITodo, unknown, ITodo, unknown>;
-  onDelete: UseMutateFunction<any, unknown, string, unknown>
+  onDelete: UseMutateFunction<any, unknown, string, unknown>;
 }
 
-const TaskList = ({ todoList, onUpdate, onDelete }: ITaskList) => {
+const TaskList = ({ todoList, onCreate, onUpdate, onDelete }: ITaskList) => {
   const [isSelectOpen, setIsSelectOpen] = useState<ITodo | undefined>(
     undefined
   );
@@ -91,6 +93,7 @@ const TaskList = ({ todoList, onUpdate, onDelete }: ITaskList) => {
           </ActionWrapper>
         </TodoListWrapper>
       ))}
+      <TaskForm onCreate={onCreate} />
     </Wrapper>
   );
 };
