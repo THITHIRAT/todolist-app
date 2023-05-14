@@ -2,8 +2,7 @@ import { useMemo, useState } from "react";
 import { Progress, Task } from "../../components";
 import { TASK_STATUS } from "../../constants";
 import { Box, Wrapper } from "./TodoList.style";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createTask, deleteTask, getTask, updateTask } from "../../api/task";
+import useTodoList from "./useTodoList";
 
 const TaskStatusOptions = [
   TASK_STATUS.ALL,
@@ -12,24 +11,9 @@ const TaskStatusOptions = [
 ];
 
 const TodoList = () => {
-  const queryClient = useQueryClient();
   const [taskStatus, setTaskStatus] = useState(TaskStatusOptions[0]);
-  const { data: todoList } = useQuery("getTasks", () => getTask());
-  const { mutate: createTodo } = useMutation(createTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("getTasks");
-    },
-  });
-  const { mutate: updateTodo } = useMutation(updateTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("getTasks");
-    },
-  });
-  const { mutate: deleteTodo } = useMutation(deleteTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("getTasks");
-    },
-  });
+  const { isLoading, todoList, createTodo, updateTodo, deleteTodo } =
+    useTodoList();
 
   const displayList = useMemo(() => {
     const list = todoList || [];
@@ -41,23 +25,26 @@ const TodoList = () => {
   }, [todoList]);
 
   return (
-    <Wrapper>
-      <Box>
-        <Progress
-          completeTask={displayList[TASK_STATUS.DONE].length}
-          allTask={displayList[TASK_STATUS.ALL].length}
-        />
-        <Task
-          todoList={displayList[taskStatus]}
-          taskStatusOptions={TaskStatusOptions}
-          taskStatus={taskStatus}
-          setTaskStatus={setTaskStatus}
-          onCreate={createTodo}
-          onUpdate={updateTodo}
-          onDelete={deleteTodo}
-        />
-      </Box>
-    </Wrapper>
+    <div>
+      <Wrapper>
+        <Box>
+          <Progress
+            isLoading={isLoading}
+            completeTask={displayList[TASK_STATUS.DONE].length}
+            allTask={displayList[TASK_STATUS.ALL].length}
+          />
+          <Task
+            todoList={displayList[taskStatus]}
+            taskStatusOptions={TaskStatusOptions}
+            taskStatus={taskStatus}
+            setTaskStatus={setTaskStatus}
+            onCreate={createTodo}
+            onUpdate={updateTodo}
+            onDelete={deleteTodo}
+          />
+        </Box>
+      </Wrapper>
+    </div>
   );
 };
 

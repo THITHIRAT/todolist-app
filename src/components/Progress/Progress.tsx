@@ -7,18 +7,23 @@ import {
 } from "./Progress.style";
 
 interface IProgress {
+  isLoading: boolean
   completeTask: number;
   allTask: number;
 }
 
-const Progress = ({ completeTask, allTask }: IProgress) => {
+const Progress = ({ isLoading, completeTask, allTask }: IProgress) => {
   return (
     <Wrapper>
       <HeaderText>Progress</HeaderText>
       <ProgressBar>
         <CompletedBar percentage={completeTask / (allTask || 1) * 100} />
-      </ProgressBar>
-      <TitleText>{completeTask} completed</TitleText>
+      </ProgressBar> 
+      {isLoading ? (
+        <TitleText>Loading...</TitleText>
+      ) : (
+        <TitleText>{completeTask} completed</TitleText>
+      )}
     </Wrapper>
   );
 };

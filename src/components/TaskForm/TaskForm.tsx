@@ -24,6 +24,7 @@ const TaskForm = ({ task, setEditTaskId, onCreate, onUpdate }: ITaskForm) => {
     } else {
       onCreate && onCreate(title);
     }
+    setTitle("");
   }
 
   return (  
